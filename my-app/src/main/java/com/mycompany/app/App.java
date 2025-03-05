@@ -75,7 +75,7 @@ public class App
         System.out.println("------------ Decode JWT ------------");
         String[] split_string = jwtToken.split("\\.");
         String base64EncodedHeader = split_string[0];
-        String base64EncodedBody = split_string[1];
+        String base64EncodedBody = addPaddingToBase64(base64UrlToBase64(split_string[1]));
         String base64EncodedSignature = split_string[2];
 //        System.out.println(base64EncodedBody);
 
@@ -87,5 +87,27 @@ public class App
         System.out.println("~~~~~~~~~ JWT Body ~~~~~~~");
         String body = new String(Base64.getMimeDecoder().decode(base64EncodedBody.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
         System.out.println("JWT Body : "+body);
+    }
+
+    // 將 URL 安全的 Base64 字符串轉換為標準的 Base64 字符串
+    public static String base64UrlToBase64(String base64Url) {
+        return base64Url.replace('-', '+').replace('_', '/');
+    }
+
+    public static String addPaddingToBase64(String base64String) {
+        int length = base64String.length();
+        int remainder = length % 4;
+        if (remainder == 0) {
+            return base64String; // 不需要填充
+        }
+
+        int paddingLength = 4 - remainder;
+        StringBuilder paddedBase64String = new StringBuilder(base64String);
+
+        for (int i = 0; i < paddingLength; i++) {
+            paddedBase64String.append("="); // 添加填充符號
+        }
+
+        return paddedBase64String.toString();
     }
 }
