@@ -50,8 +50,8 @@ public class App
         String jwtSecret = "jwtSecret";
         byte[] bytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
         SecretKeySpec key = new SecretKeySpec(bytes, "HmacSHA256");
-        String base64UrlEncodeBody = Base64.getUrlEncoder().encodeToString(bodyString.getBytes(StandardCharsets.UTF_8));
-        String base64UrlEncodeHeader = Base64.getUrlEncoder().encodeToString(headerString.getBytes(StandardCharsets.UTF_8));
+        String base64UrlEncodeBody = Base64.getUrlEncoder().withoutPadding().encodeToString(bodyString.getBytes(StandardCharsets.UTF_8));
+        String base64UrlEncodeHeader = Base64.getUrlEncoder().withoutPadding().encodeToString(headerString.getBytes(StandardCharsets.UTF_8));
         String message = base64UrlEncodeHeader+"."+base64UrlEncodeBody;
         try {
             Mac hmacSHA256 = Mac.getInstance("HmacSHA256");
